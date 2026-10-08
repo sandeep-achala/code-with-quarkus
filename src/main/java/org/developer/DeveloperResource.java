@@ -2,6 +2,8 @@ package org.developer;
 
 import java.util.List;
 
+import org.CommonResponse.ApiResponse;
+
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -21,9 +23,9 @@ public class DeveloperResource {
 
     // 1. READ (Get All)
     @GET
-    public List<Developer> getAll() {
+    public ApiResponse<List<Developer>> getAll() {
         System.out.println("Fetching all developers...");
-        return Developer.listAll();
+        return ApiResponse.success("developers fetched successfully", Developer.listAll());
     }
 
     // 1b. READ (Get by ID)
@@ -33,9 +35,10 @@ public class DeveloperResource {
         System.out.println("Fetching developer with ID: " + id);
         Developer developer = Developer.findById(id);
         if (developer == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ApiResponse.failure("developer not found")).build();
         }
-        return Response.ok(developer).build();
+        return Response.ok(ApiResponse.success("developer fetched successfully", developer)).build();
     }
 
     // 2. CREATE
@@ -43,7 +46,8 @@ public class DeveloperResource {
     @Transactional
     public Response create(Developer developer) {
         developer.persist();
-        return Response.status(Response.Status.CREATED).entity(developer).build();
+        return Response.status(Response.Status.CREATED)
+                .entity(ApiResponse.success("developer created successfully", developer)).build();
     }
 
     // 3. UPDATE
@@ -53,14 +57,15 @@ public class DeveloperResource {
     public Response update(@PathParam("id") Long id, Developer updatedDeveloper) {
         Developer entity = Developer.findById(id);
         if (entity == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(ApiResponse.failure("developer not found")).build();
         }
         
         // Update fields
         entity.name = updatedDeveloper.name;
         entity.programmingLanguage = updatedDeveloper.programmingLanguage;
         
-        return Response.ok(entity).build();
+        return Response.ok(ApiResponse.success("developer updated successfully", entity)).build();
     }
 
     // 4. DELETE
@@ -71,8 +76,9 @@ public class DeveloperResource {
         boolean deleted = Developer.deleteById(id);
         
         if (deleted) {
-            return Response.noContent().build();
+            return Response.ok(ApiResponse.success("developer deleted successfully", null)).build();
         }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity(ApiResponse.failure("developer not found")).build();
     }
 }

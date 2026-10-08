@@ -14,7 +14,9 @@ class GreetingResourceTest {
           .when().get("/hello")
           .then()
              .statusCode(200)
-             .body(is("Hello Sandeep"));
+             .body("status", is(true))
+             .body("message", is("greeting fetched successfully"))
+             .body("data", is("Hello Sandeep"));
     }
 
 }
