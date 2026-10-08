@@ -6,6 +6,18 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 
 ## Running the application in dev mode
 
+The application uses PostgreSQL. Set these environment variables before starting it, or edit the defaults in `src/main/resources/application.properties`:
+
+| Variable | Example default |
+| --- | --- |
+| `DB_HOST` | `localhost` |
+| `DB_PORT` | `5432` |
+| `DB_NAME` | `developers` |
+| `DB_USERNAME` | `postgres` |
+| `DB_PASSWORD` | `change-me` |
+
+Replace the example password with your database password. The schema management strategy is set to `update`.
+
 You can run your application in dev mode that enables live coding using:
 
 ```shell script
