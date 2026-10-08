@@ -18,6 +18,8 @@ dependencies {
     testImplementation 'io.quarkus:quarkus-junit'
     testImplementation 'io.rest-assured:rest-assured'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
+    implementation 'io.quarkus:quarkus-elytron-security-common'
+
 }
 
 group = 'org.acme'
